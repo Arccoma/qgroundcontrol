@@ -1426,6 +1426,17 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
     mavlink_battery_status_t batteryStatus;
     mavlink_msg_battery_status_decode(&message, &batteryStatus);
 
+
+//    qDebug() <<"Vehicle::_handleBatteryStatus(mavlink_message_t& message)";
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qCDebug(VehicleLog) << "_handleBatteryStatus: primary link gone!";
+        return;
+    }
+    this->sendMessageOnLinkThreadSafe(sharedLink.get(),message);
+
+
+
     if (!_lowestBatteryChargeStateAnnouncedMap.contains(batteryStatus.id)) {
         _lowestBatteryChargeStateAnnouncedMap[batteryStatus.id] = batteryStatus.charge_state;
     }
