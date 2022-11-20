@@ -1426,15 +1426,21 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
     mavlink_battery_status_t batteryStatus;
     mavlink_msg_battery_status_decode(&message, &batteryStatus);
 
+//  transfer message to mavlink_udp program
 
+/* 
 //    qDebug() <<"Vehicle::_handleBatteryStatus(mavlink_message_t& message)";
     SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
     if (!sharedLink) {
         qCDebug(VehicleLog) << "_handleBatteryStatus: primary link gone!";
         return;
     }
-    this->sendMessageOnLinkThreadSafe(sharedLink.get(),message);
-
+    this->sendMessageOnLinkThreadSafe(sharedLink.get(),message); 
+    // It works only simulation. In real FC connection test, maybe the sharedLink is not UDPLink. but SerialLink.
+*/
+    
+    this->sendMessageOnLinkThreadSafe(_linkManager->links()[0].get(),message); // get UDPLink
+    // It works in real FC connection. mavlink_udp program can receive the message.
 
 
     if (!_lowestBatteryChargeStateAnnouncedMap.contains(batteryStatus.id)) {

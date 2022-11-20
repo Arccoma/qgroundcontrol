@@ -114,12 +114,14 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
     switch(config->type()) {
 #ifndef NO_SERIAL_LINK
     case LinkConfiguration::TypeSerial:
+        qDebug() << "@ LinkManager::createConnectedLink() link = <SerialLink>";
         link = std::make_shared<SerialLink>(config, isPX4Flow);
         break;
 #else
     Q_UNUSED(isPX4Flow)
 #endif
     case LinkConfiguration::TypeUdp:
+        qDebug() << "@ LinkManager::createConnectedLink() link = <UDPLink>";
         link = std::make_shared<UDPLink>(config);
         break;
     case LinkConfiguration::TypeTcp:
@@ -147,8 +149,9 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
             qCWarning(LinkManagerLog) << "Link failed to setup mavlink channels";
             return false;
         }
-
+        
         _rgLinks.append(link);
+        qDebug() << "@@@ LinkManager::createConnectedLink() _rgLinks.append(link) _rgLinks.count:"<< _rgLinks.count();
         config->setLink(link);
 
         connect(link.get(), &LinkInterface::communicationError,  _app,                &QGCApplication::criticalMessageBoxOnMainThread);
@@ -165,7 +168,7 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
             config->setLink(nullptr);
             return false;
         }
-
+        qDebug() << "@@@ LinkManager::createConnectedLink() link->_connect() sucsess.";
         return true;
     }
 
