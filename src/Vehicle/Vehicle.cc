@@ -2608,11 +2608,18 @@ QString Vehicle::gotoFlightMode() const
 
 void Vehicle::guidedModeRTL(bool smartRTL)
 {
+    qDebug() <<"Vehicle::guidedModeRTL() Return to Launch by user command through QGC button";
+    qDebug() <<"not by PX4's fail safe trigger action"
+    //Critical messages from the firmware are delivered to MainRootWindow.qml and displayed in a pop-up window.
+
     if (!guidedModeSupported()) {
         qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
         return;
     }
     _firmwarePlugin->guidedModeRTL(this, smartRTL);
+
+    _sendQGCTimeToVehicle();// MAVLINK_MSG_ID_SYSTEM_TIME: Try sending a random message to mavlink_udp program.
+    //If I could signal Arduino directly, I might not be able to turn around and send a message like this.
 }
 
 void Vehicle::guidedModeLand()

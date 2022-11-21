@@ -528,14 +528,15 @@ ApplicationWindow {
 
         background: Rectangle {
             anchors.fill:   parent
-            color:          qgcPal.alertBackground
+            color:          "Pink" //qgcPal.alertBackground
             radius:         ScreenTools.defaultFontPixelHeight * 0.5
             border.color:   qgcPal.alertBorder
             border.width:   2
         }
 
         onOpened: {
-            criticalVehicleMessageText.text = mainWindow._vehicleMessage
+            criticalVehicleMessageText.text = "I LOVE YOU TO DEATH !" //mainWindow._vehicleMessage
+            // ex) PX4's fail safe trigger message: critical battery level
         }
 
         onClosed: {
