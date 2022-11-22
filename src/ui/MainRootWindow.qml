@@ -535,8 +535,9 @@ ApplicationWindow {
         }
 
         onOpened: {
-            criticalVehicleMessageText.text = "I LOVE YOU TO DEATH !" //mainWindow._vehicleMessage
-            // ex) PX4's fail safe trigger message: critical battery level
+            criticalVehicleMessageText.text = "Critical Vehicle Message Popup!(src/ui/MainRootWindow.qml)"+"<br><br>" + mainWindow._vehicleMessage  
+            // ex) PX4's fail safe trigger message: Failsafe activated due to critical battery level, triggering RTL in 5 seconds
+            // "Failsafe activated due to .." found in FIRMWARE > src > modules > failsafe > framework.cpp > notifyUser()fucntion.
         }
 
         onClosed: {

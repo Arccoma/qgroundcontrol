@@ -943,6 +943,9 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
     strncpy(b.data(), statustext.text, MAVLINK_MSG_STATUSTEXT_FIELD_TEXT_LEN);
     b[b.length()-1] = '\0';
     messageText = QString(b);
+
+    qDebug() << "@ Vehicle::_handleStatusText()" << messageText;
+
     bool includesNullTerminator = messageText.length() < MAVLINK_MSG_STATUSTEXT_FIELD_TEXT_LEN;
 
     if (_chunkedStatusTextInfoMap.contains(compId) && _chunkedStatusTextInfoMap[compId].chunkId != statustext.id) {
@@ -2609,7 +2612,7 @@ QString Vehicle::gotoFlightMode() const
 void Vehicle::guidedModeRTL(bool smartRTL)
 {
     qDebug() <<"Vehicle::guidedModeRTL() Return to Launch by user command through QGC button";
-    qDebug() <<"not by PX4's fail safe trigger action"
+    qDebug() <<"not by PX4's fail safe trigger action";
     //Critical messages from the firmware are delivered to MainRootWindow.qml and displayed in a pop-up window.
 
     if (!guidedModeSupported()) {
