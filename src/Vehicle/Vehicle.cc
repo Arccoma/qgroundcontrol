@@ -945,6 +945,31 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
     messageText = QString(b);
 
     qDebug() << "@ Vehicle::_handleStatusText()" << messageText;
+    /* text from firmware
+    "Armed by external command\t"
+    "[logger] ./log/2022-11-22/16_53_52.ulg\t"
+    "Takeoff detected\t"
+    "Preflight Fail: low battery\t"
+    "Preflight Fail: No manual control input\t"
+    "Failsafe activated, entering Hold for 5 seconds\t"
+    "Failsafe activated\t"
+    "RTL HOME activated\t"
+    "RTL: landing at home position.\t"
+      :
+    "RTL: land at destination\t"
+    "Landing detected\t"
+    "Takeoff detected\t"  ???
+    "Landing detected\t"  ???
+    "Disarmed by landing\t"
+    */
+    if("RTL HOME activated\t" == messageText)
+    {
+        qDebug() << "@@ OK.I got it!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+        qDebug() << "@ I will send this status text message to mavlink_udp program on UDPLink @";
+        qDebug() << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+
+        this->sendMessageOnLinkThreadSafe(_linkManager->links()[0].get(),message);
+    }
 
     bool includesNullTerminator = messageText.length() < MAVLINK_MSG_STATUSTEXT_FIELD_TEXT_LEN;
 
