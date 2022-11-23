@@ -946,6 +946,7 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
 
     qDebug() << "@ Vehicle::_handleStatusText()" << messageText;
     /* text from firmware
+    ---------------------------------- PX4_SITL (2022/11/22/Tue)
     "Armed by external command\t"
     "[logger] ./log/2022-11-22/16_53_52.ulg\t"
     "Takeoff detected\t"
@@ -961,8 +962,21 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
     "Takeoff detected\t"  ???
     "Landing detected\t"  ???
     "Disarmed by landing\t"
+    ----------------------------------- Ardupilot (2022/11/23/wed) 
+    "Battery 1 is low 13.85V used 0 mAh"
+    "Battery Failsafe" 
+    ------------------------------------ PX4 Pro Stable Release v.1.13.2
+    Armed by RC
+    logging: ...
+    Takeoff detected
+    Low battery level, return advised
+    Critical battery level, executing RTL in 10 seconds
+    RTL activated
+    "Manual control lost\t"  - RC Loss
     */
-    if("RTL HOME activated\t" == messageText)
+    
+    //if(("Battery Failsafe" == messageText) || "Failsafe activated\t" ==messageText )//Ardupilot  message
+    if (("RTL activated"== messageText)||("RTL HOME activated\t"==messageText) )
     {
         qDebug() << "@@ OK.I got it!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
         qDebug() << "@ I will send this status text message to mavlink_udp program on UDPLink @";
