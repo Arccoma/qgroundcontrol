@@ -975,8 +975,16 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
     "Manual control lost\t"  - RC Loss
     */
     
-    //if(("Battery Failsafe" == messageText) || "Failsafe activated\t" ==messageText )//Ardupilot  message
-    if (("RTL activated"== messageText)||("RTL HOME activated\t"==messageText) )
+    if ("Armed by RC"           == messageText ||
+        "Takeoff detected\t"    == messageText ||
+        "Battery Failsafe"      == messageText ||
+        "Failsafe activated\t"  == messageText ||
+        "RTL activated"         == messageText ||
+        "RTL HOME activated\t"  == messageText ||
+        "Manual control lost"   == messageText || // RC Loss 
+        "Landing detected\t"    == messageText ||
+        "Disarmed by landing\t" == messageText
+    )
     {
         qDebug() << "@@ OK.I got it!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
         qDebug() << "@ I will send this status text message to mavlink_udp program on UDPLink @";
