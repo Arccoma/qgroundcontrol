@@ -966,32 +966,20 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
     "Battery 1 is low 13.85V used 0 mAh"
     "Battery Failsafe" 
     ------------------------------------ PX4 Pro Stable Release v.1.13.2
-    Armed by RC
-    logging: ...
-    Takeoff detected
-    Low battery level, return advised
-    Critical battery level, executing RTL in 10 seconds
-    RTL activated
-    "Manual control lost\t"  - RC Loss
+    "Armed by RC"
+    "logging: ...""
+    "Takeoff detected"
+    "Low battery level, return advised"
+    "Critical battery level, executing RTL in 10 seconds"
+    "Manual control lost\t"  ---------------------------------------------> RC Loss
+    "RTL activated"
+    "RTL HOME activated"    ----------------------------------------------> RTL 
+    "Landing detected"
+    "Disarmed by landing"
     */
-    
-    if ("Armed by RC"           == messageText ||
-        "Takeoff detected\t"    == messageText ||
-        "Battery Failsafe"      == messageText ||
-        "Failsafe activated\t"  == messageText ||
-        "RTL activated"         == messageText ||
-        "RTL HOME activated\t"  == messageText ||
-        "Manual control lost"   == messageText || // RC Loss 
-        "Landing detected\t"    == messageText ||
-        "Disarmed by landing\t" == messageText
-    )
-    {
-        qDebug() << "@@ OK.I got it!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
-        qDebug() << "@ I will send this status text message to mavlink_udp program on UDPLink @";
-        qDebug() << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+    // forward the message to mavlink_udp program
+    this->sendMessageOnLinkThreadSafe(_linkManager->links()[0].get(),message);
 
-        this->sendMessageOnLinkThreadSafe(_linkManager->links()[0].get(),message);
-    }
 
     bool includesNullTerminator = messageText.length() < MAVLINK_MSG_STATUSTEXT_FIELD_TEXT_LEN;
 
